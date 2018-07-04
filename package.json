@@ -1,0 +1,27 @@
+{
+  "name": "vue-router-modern",
+  "version": "1.0.0",
+  "description": "Easily write modern vue routes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiutuleng/vue-router-modern.git"
+  },
+  "keywords": [
+    "vue-router",
+    "modern",
+    "modules"
+  ],
+  "author": "Qiu Tuleng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qiutuleng/vue-router-modern/issues"
+  },
+  "homepage": "https://github.com/qiutuleng/vue-router-modern#readme",
+  "devDependencies": {
+    "eslint": "^5.0.1"
+  }
+}
