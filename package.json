@@ -2,8 +2,9 @@
   "name": "vue-router-modern",
   "version": "1.0.0",
   "description": "Easily write modern vue routes",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "lint": "eslint --fix src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,9 @@
   },
   "homepage": "https://github.com/qiutuleng/vue-router-modern#readme",
   "devDependencies": {
-    "eslint": "^5.0.1"
-  }
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0"
+  },
+  "dependencies": {}
 }
