@@ -6,19 +6,20 @@ class Router {
     this.setComponent(null);
     this.setComponents(null);
     this.setRedirectTo(null);
+    this.setProps(null);
     this.routerChildren = [];
   }
 
-  get(path, component, name) {
-    return this.setPath(path).setComponent(component).setName(name);
+  get(path, component, name, props) {
+    return this.setPath(path).setComponent(component).setName(name).setProps(props);
   }
 
   static get(...parameters) {
     return Router.instance().get(...parameters);
   }
 
-  getWithComponents(path, components, name) {
-    return this.setPath(path).setComponents(components).setName(name);
+  getWithComponents(path, components, name, props) {
+    return this.setPath(path).setComponents(components).setName(name).setProps(props);
   }
 
   static getWithComponents(...parameters) {
@@ -75,9 +76,18 @@ class Router {
     return this;
   }
 
+  setProps(props) {
+    this.props = props;
+    return this;
+  }
+
   setRedirectTo(redirectTo) {
     this.redirectTo = redirectTo;
     return this;
+  }
+
+  hasProps() {
+    return !!this.props;
   }
 
   hasName() {
@@ -136,6 +146,9 @@ class Router {
         data.components = this.components;
       } else if (this.redirectTo) {
         data.redirect = this.redirectTo;
+      }
+      if (this.hasProps()) {
+        data.props = this.props;
       }
       if (this.hasName()) {
         data.name = this.name;
