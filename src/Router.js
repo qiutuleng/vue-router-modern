@@ -11,11 +11,12 @@ class Router {
     this.routerChildren = [];
   }
 
-  get(path, component, name, props, alias) {
+  get(path, component, name, props, meta, alias) {
     return this.setPath(path)
       .setComponent(component)
       .setName(name)
       .setProps(props)
+      .setMeta(meta)
       .setAlias(alias);
   }
 
@@ -23,8 +24,8 @@ class Router {
     return Router.instance().get(...parameters);
   }
 
-  getWithComponents(path, components, name, props, alias) {
-    return this.get(path, null, name, props, alias).setComponents(components);
+  getWithComponents(path, components, name, props, meta, alias) {
+    return this.get(path, null, name, props, meta, alias).setComponents(components);
   }
 
   static getWithComponents(...parameters) {
@@ -86,6 +87,11 @@ class Router {
     return this;
   }
 
+  setMeta(meta) {
+    this.meta = meta;
+    return this;
+  }
+
   setAlias(alias) {
     this.alias = alias;
     return this;
@@ -102,6 +108,10 @@ class Router {
 
   hasProps() {
     return !!this.props;
+  }
+
+  hasMeta() {
+    return !!this.meta;
   }
 
   hasAlias() {
@@ -160,6 +170,9 @@ class Router {
         data.components = this.components;
       } else if (this.redirectTo) {
         data.redirect = this.redirectTo;
+      }
+      if (this.hasMeta()) {
+        data.meta = this.meta;
       }
       if (this.hasProps()) {
         data.props = this.props;
