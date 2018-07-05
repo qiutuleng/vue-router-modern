@@ -4,6 +4,7 @@ class Router {
   constructor() {
     this.setPath(null);
     this.setComponent(null);
+    this.setComponents(null);
     this.setRedirectTo(null);
     this.routerChildren = [];
   }
@@ -14,6 +15,14 @@ class Router {
 
   static get(...parameters) {
     return Router.instance().get(...parameters);
+  }
+
+  getWithComponents(path, components, name) {
+    return this.setPath(path).setComponents(components).setName(name);
+  }
+
+  static getWithComponents(...parameters) {
+    return Router.instance().getWithComponents(...parameters);
   }
 
   redirect(path, redirectTo, name) {
@@ -48,6 +57,16 @@ class Router {
       throw new Error('The component variable must be an object');
     }
     this.component = component;
+    this.components = null;
+    return this;
+  }
+
+  setComponents(components) {
+    if (typeof components !== 'object') {
+      throw new Error('The component variable must be an object');
+    }
+    this.components = components;
+    this.component = null;
     return this;
   }
 
@@ -113,6 +132,8 @@ class Router {
       data = { path: this.path };
       if (this.component) {
         data.component = this.component;
+      } else if (this.components) {
+        data.components = this.components;
       } else if (this.redirectTo) {
         data.redirect = this.redirectTo;
       }

@@ -15,6 +15,12 @@ class RouterChildren {
     return router;
   }
 
+  getWithComponents(...parameters) {
+    const router = this.getRouterClass().getWithComponents(...parameters);
+    this.append(router);
+    return router;
+  }
+
   redirect(...parameters) {
     const router = this.getRouterClass().redirect(...parameters);
     this.append(router);
