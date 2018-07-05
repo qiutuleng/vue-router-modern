@@ -2,24 +2,29 @@ import RouterChildren from './RouterChildren';
 
 class Router {
   constructor() {
-    this.setPath(null);
-    this.setComponent(null);
-    this.setComponents(null);
-    this.setRedirectTo(null);
-    this.setProps(null);
+    this.setPath(null)
+      .setComponent(null)
+      .setComponents(null)
+      .setRedirectTo(null)
+      .setProps(null)
+      .setAlias(null);
     this.routerChildren = [];
   }
 
-  get(path, component, name, props) {
-    return this.setPath(path).setComponent(component).setName(name).setProps(props);
+  get(path, component, name, props, alias) {
+    return this.setPath(path)
+      .setComponent(component)
+      .setName(name)
+      .setProps(props)
+      .setAlias(alias);
   }
 
   static get(...parameters) {
     return Router.instance().get(...parameters);
   }
 
-  getWithComponents(path, components, name, props) {
-    return this.setPath(path).setComponents(components).setName(name).setProps(props);
+  getWithComponents(path, components, name, props, alias) {
+    return this.get(path, null, name, props, alias).setComponents(components);
   }
 
   static getWithComponents(...parameters) {
@@ -81,17 +86,26 @@ class Router {
     return this;
   }
 
+  setAlias(alias) {
+    this.alias = alias;
+    return this;
+  }
+
   setRedirectTo(redirectTo) {
     this.redirectTo = redirectTo;
     return this;
+  }
+
+  hasName() {
+    return !!this.name;
   }
 
   hasProps() {
     return !!this.props;
   }
 
-  hasName() {
-    return !!this.name;
+  hasAlias() {
+    return !!this.props;
   }
 
   appendRouterChildren(routerChildren) {
@@ -149,6 +163,9 @@ class Router {
       }
       if (this.hasProps()) {
         data.props = this.props;
+      }
+      if (this.hasAlias()) {
+        data.alias = this.alias;
       }
       if (this.hasName()) {
         data.name = this.name;
