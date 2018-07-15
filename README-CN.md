@@ -195,6 +195,34 @@ router.get('/posts', PostHomeComponent)
 // }
 ```
 
+#### registerChild(router[, router2[, ...routerN]])
+
+这个方法是registerChildren的别名。
+
+#### registerChildren(router[, router2[, ...routerN]])
+
+注册子路由，通常用于子模块。
+
+示例:
+```javascript
+// 在vue-init生成的src/router/index.js文件中。
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Router from 'vue-router-modern';
+import UserRouter from './modules/user/index.js';
+import PostRouter from './modules/post/index.js';
+
+const router = Router.instance();
+
+router.registerChildren(UserRouter, PostRouter)
+
+Vue.use(VueRouter);
+
+export default new VueRouter({
+  routes: router.parseRoutes()
+})
+```
+
 ## 贡献
 
 你可以在此仓库中创建一个[pull requests](https://github.com/qiutuleng/vue-router-modern/pulls)。
