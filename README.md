@@ -1,7 +1,6 @@
 # Vue router modern
 
 [![npm version](https://img.shields.io/npm/v/vue-router-modern.svg?style=flat-square)](https://www.npmjs.org/package/vue-router-modern)
-
 [![npm downloads](https://img.shields.io/npm/dm/vue-router-modern.svg?style=flat-square)](http://npm-stat.com/charts.html?package=vue-router-modern)
 
 Router of Vue.js - Easily write modern vue routes.
