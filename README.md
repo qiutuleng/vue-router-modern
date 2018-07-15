@@ -131,7 +131,7 @@ export default Router.group(router => {
 
   router.get('/user/:userId', UserDetailComponent); // It is not a sub-route of the user.
 }); 
-// The routes like this of official definition:
+// The routes like this of vue-router official definition:
 // [
 //   {path: '/user', component: UserComponent},
 //   {path: '/user/:userId', component: UserDetailComponent},
@@ -186,7 +186,7 @@ router.get('/posts', PostHomeComponent)
         router.get('new', PostCreaterComponent) // Its' a sub-router for posts
 
       })
-// The routes like this of official definition:
+// The routes like this of vue-router official definition:
 // {
 //   path: '/posts',
 //   component: PostHomeComponent,
