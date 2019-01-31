@@ -4,11 +4,12 @@ class Router {
   constructor() {
     this.setPath(null)
       .setComponent(null)
-      .setComponents(null)
+      .setNamedComponents(null)
       .setRedirectTo(null)
       .setProps(null)
       .setAlias(null);
-    this.routerChildren = [];
+
+    this.children = [];
   }
 
   get(path, component, name, props, meta, alias) {
@@ -24,12 +25,12 @@ class Router {
     return Router.instance().get(...parameters);
   }
 
-  getWithComponents(path, components, name, props, meta, alias) {
-    return this.get(path, null, name, props, meta, alias).setComponents(components);
+  getWithNamedComponents(path, components, name, props, meta, alias) {
+    return this.get(path, null, name, props, meta, alias).setNamedComponents(components);
   }
 
-  static getWithComponents(...parameters) {
-    return Router.instance().getWithComponents(...parameters);
+  static getWithNamedComponents(...parameters) {
+    return Router.instance().getWithNamedComponents(...parameters);
   }
 
   redirect(path, redirectTo, name) {
@@ -42,8 +43,10 @@ class Router {
 
   group(callback) {
     const routerChildren = RouterChildren.instance(Router);
+
     callback(routerChildren);
-    return this.appendRouterChildren(routerChildren);
+
+    return this.appendChildren(routerChildren);
   }
 
   static group(...parameters) {
@@ -68,12 +71,14 @@ class Router {
     return this;
   }
 
-  setComponents(components) {
+  setNamedComponents(components) {
     if (typeof components !== 'object') {
       throw new Error('The component variable must be an object');
     }
+
     this.components = components;
     this.component = null;
+
     return this;
   }
 
@@ -102,6 +107,18 @@ class Router {
     return this;
   }
 
+  hasPath() {
+    return !!this.path;
+  }
+
+  hasComponent() {
+    return !!this.component;
+  }
+
+  hasComponents() {
+    return !!this.components;
+  }
+
   hasName() {
     return !!this.name;
   }
@@ -115,29 +132,37 @@ class Router {
   }
 
   hasAlias() {
-    return !!this.props;
+    return !!this.alias;
   }
 
-  appendRouterChildren(routerChildren) {
+  appendChildren(routerChildren) {
     if (!(routerChildren instanceof RouterChildren)) {
-      throw new Error('The routerChildren variable must be an instance of the RouterChildren.');
+      throw new Error('The children variable must be an instance of the RouterChildren.');
     }
-    if (this.IsRouterChildDosentExist(routerChildren)) {
-      this.routerChildren.push(routerChildren);
+
+    if (this.IsChildDosentExist(routerChildren)) {
+      this.children.push(routerChildren);
     }
+
     return this;
   }
 
-  IsRouterChildDosentExist(routerChildren) {
-    return !~this.routerChildren.indexOf(routerChildren);
+  IsChildDosentExist(routerChildren) {
+    return !~this.children.indexOf(routerChildren);
   }
 
-  hasRouterChildren() {
-    return this.routerChildren.length > 0;
+  hasChildren() {
+    return this.children.length > 0;
   }
 
-  registerChild(...routers) {
-    return this.registerChildren(...routers);
+  register(...routers) {
+    const parameters = [];
+
+    routers.forEach(
+      router => (Array.isArray(router) ? parameters.push(...router) : parameters.push(router)),
+    );
+
+    return this.registerChildren(...parameters);
   }
 
   registerChildren(...routers) {
@@ -145,25 +170,29 @@ class Router {
       if (!(router instanceof Router)) {
         throw new Error('The router variable must be an instance of the Router.');
       }
+
       if (router.isRoot()) {
-        this.appendRouterChildren(...router.routerChildren);
+        this.appendChildren(...router.children);
       } else {
-        this.appendRouterChildren(RouterChildren.instance(Router).append(router));
+        this.appendChildren(RouterChildren.instance(Router).append(router));
       }
     });
+
     return this;
   }
 
   isRoot() {
-    return this.path === null;
+    return !this.path;
   }
 
-  parseRoutes() {
+  routes() {
     let data;
+
     if (this.isRoot()) {
-      data = this.parseChildrenRoutes();
+      data = this.childrenRoutes();
     } else {
       data = { path: this.path };
+
       if (this.component) {
         data.component = this.component;
       } else if (this.components) {
@@ -171,27 +200,19 @@ class Router {
       } else if (this.redirectTo) {
         data.redirect = this.redirectTo;
       }
-      if (this.hasMeta()) {
-        data.meta = this.meta;
-      }
-      if (this.hasProps()) {
-        data.props = this.props;
-      }
-      if (this.hasAlias()) {
-        data.alias = this.alias;
-      }
-      if (this.hasName()) {
-        data.name = this.name;
-      }
-      if (this.hasRouterChildren()) {
-        data.children = this.parseChildrenRoutes();
-      }
+
+      if (this.hasMeta()) data.meta = this.meta;
+      if (this.hasProps()) data.props = this.props;
+      if (this.hasAlias()) data.alias = this.alias;
+      if (this.hasName()) data.name = this.name;
+      if (this.hasChildren()) data.children = this.childrenRoutes();
     }
+
     return data;
   }
 
-  parseChildrenRoutes() {
-    return [].concat(...this.routerChildren.map(routerChildren => routerChildren.parseRouters()));
+  childrenRoutes() {
+    return [].concat(...this.children.map(routerChildren => routerChildren.routes()));
   }
 }
 

@@ -11,19 +11,25 @@ class RouterChildren {
 
   get(...parameters) {
     const router = this.getRouterClass().get(...parameters);
+
     this.append(router);
+
     return router;
   }
 
-  getWithComponents(...parameters) {
-    const router = this.getRouterClass().getWithComponents(...parameters);
+  getWithNamedComponents(...parameters) {
+    const router = this.getRouterClass().getWithNamedComponents(...parameters);
+
     this.append(router);
+
     return router;
   }
 
   redirect(...parameters) {
     const router = this.getRouterClass().redirect(...parameters);
+
     this.append(router);
+
     return router;
   }
 
@@ -35,6 +41,7 @@ class RouterChildren {
     if (this.isDosentExist(router)) {
       this.routers.push(router);
     }
+
     return this;
   }
 
@@ -42,6 +49,7 @@ class RouterChildren {
     if (typeof routerClass !== 'function') {
       throw new Error('The routerClass variable must be an Router class');
     }
+
     this.routerClass = routerClass;
   }
 
@@ -53,7 +61,9 @@ class RouterChildren {
     if (!(parent instanceof this.getRouterClass()) && parent !== null) {
       throw new Error('The parent variable must be an instance of the Router or null');
     }
+
     this.parent = parent;
+
     return this;
   }
 
@@ -61,8 +71,8 @@ class RouterChildren {
     return this.parent;
   }
 
-  parseRouters() {
-    return this.routers.map(router => router.parseRoutes());
+  routes() {
+    return this.routers.map(router => router.routes());
   }
 }
 
